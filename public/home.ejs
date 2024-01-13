@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    // check if comments are received from backend, if yes, display them
+    <% if(comments.length > 0) { %>
+        <h1>Comments</h1>
+        <ul>
+            <% comments.forEach(function(comment) { %>
+                <li>
+                    <p><%= comment.comment %></p>
+                    <p>by <%= comment.name %></p>
+                </li>
+            <% }) %>
+        </ul>
+    <% } %>
+    // check if user is logged in, if yes, display the form to add a new comment
+    <% if(currentUser) { %>
+        <form action="/comments" method="POST">
+            <input type="text" name="comment[text]" placeholder="Comment">
+            <button>Submit</button>
+        </form>
+    <% } else { %>
+        <p>Please login to comment</p>
+    <% } %>
+</body>
+</html>
