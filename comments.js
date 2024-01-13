@@ -1,32 +1,47 @@
-// create web server
-var express = require('express');
-// get router
-var router = express.Router();
-// get comment model
-var Comment = require('../models/comment');
-// get article model
-var Article = require('../models/article');
-// get user model
-var User = require('../models/user');
-// get comment model
-var Comment = require('../models/comment');
-// get checkLogin middleware
-var checkLogin = require('../middlewares/check').checkLogin;
+// create web server with express
+const express = require('express');
+const app = express();
+const path = require('path');
+const port = 3000;
 
-// POST /comments create a comment
-router.post('/', checkLogin, function(req, res, next){
-    // get data
-    var author = req.session.user._id;
-    var articleId = req.fields.articleId;
-    var content = req.fields.content;
+// serve static files
+app.use(express.static(path.join(__dirname, 'public')));
 
-    // check data
-    try{
-        if(!content.length){
-            throw new Error('Please fill in the comments');
-        }
-    }catch(e){
-        req.flash('error', e.message);
-        return res.redirect('back');
-    }
+// set the view engine to ejs
+app.set('view engine', 'ejs');
+
+// use res.render to load up an ejs view file
+// index page
+app.get('/', (req, res) => {
+  // render `home.ejs` with the list of posts
+  res.render('pages/index', { posts: posts });
 });
+
+// about page
+app.get('/about', (req, res) => {
+  res.render('pages/about');
+});
+
+// start server on port 3000
+app.listen(port, () => {
+  console.log(`App running on port ${port}`);
+});
+
+// Array of posts
+const posts = [
+  {
+    id: 1,
+    title: 'Lorem ipsum dolor sit amet',
+    date: 'September 24, 2019'
+  },
+  {
+    id: 2,
+    title: 'Consectetur adipiscing elit',
+    date: 'September 26, 2019'
+  },
+  {
+    id: 3,
+    title: 'Integer molestie lorem at massa',
+    date: 'September 28, 2019'
+  }
+];
